@@ -10,7 +10,8 @@ export const profile = {
   location: "Dhaka, Bangladesh",
   github: "https://github.com/safikolislam", // e.g. "https://github.com/your-username"
   linkedin: "https://www.linkedin.com/in/mdsafikolislam/",
-  resumeUrl: "/public/SAFIKOL_ISLAM_RESUME.pdf", // replace the PDF in /public with the same name to update
+ // replace the PDF in /public with the same name to update
+
   roles: [
     "Full-stack Web Developer",
     "Next.js & TypeScript Engineer",
