@@ -1,5 +1,6 @@
 import { skillGroups, softSkills } from "@/lib/data";
 import { Reveal, SectionHeading } from "./Reveal";
+import SkillIcon from "./skillIcons";
 
 const all = skillGroups.flatMap((g) => g.items);
 
@@ -12,7 +13,8 @@ export default function Skills() {
       <Reveal className="relative mb-12 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
         <div className="flex w-max animate-marquee gap-3 hover:[animation-play-state:paused]">
           {[...all, ...all].map((s, i) => (
-            <span key={i} className="glass whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-medium text-white">
+            <span key={i} className="glass inline-flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-medium text-white">
+              <SkillIcon name={s} size={18} />
               {s}
             </span>
           ))}
@@ -30,7 +32,10 @@ export default function Skills() {
               </h3>
               <div className="relative flex flex-wrap gap-2">
                 {g.items.map((s) => (
-                  <span key={s} className="chip">{s}</span>
+                  <span key={s} className="chip inline-flex items-center gap-1.5">
+                    <SkillIcon name={s} size={14} />
+                    {s}
+                  </span>
                 ))}
               </div>
             </div>

@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { profile, projects, skillGroups } from "@/lib/data";
-import { GithubIcon, LinkedinIcon } from "./icons";
+import { FacebookIcon, GithubIcon, LinkedinIcon } from "./icons";
 import TechLogo from "./TechLogo";
 
 const RESUME_PATH = "/SAFIKOL_ISLAM_RESUME.pdf";
@@ -104,6 +104,11 @@ export default function Hero() {
             {profile.linkedin && (
               <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="glass grid h-11 w-11 place-items-center rounded-full transition hover:-translate-y-1 hover:text-white">
                 <LinkedinIcon className="h-5 w-5" />
+              </a>
+            )}
+            {profile.facebook && (
+              <a href={profile.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="glass grid h-11 w-11 place-items-center rounded-full transition hover:-translate-y-1 hover:text-white">
+                <FacebookIcon className="h-5 w-5" />
               </a>
             )}
             <span className="flex items-center gap-1.5 text-sm">

@@ -42,7 +42,7 @@ export default function WhatsAppFloat() {
   return (
     <>
      
-      <Button side="right" delay="5s" />
+      <Button side="left" delay="5s" />
     </>
   );
 }
