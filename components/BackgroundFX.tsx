@@ -17,11 +17,18 @@ export default function BackgroundFX() {
     if (!ctx) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let w = 0, h = 0, raf = 0, t = 0;
+    // Lite mode: phones / touch screens / weak devices get a much lighter animation.
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    const lite =
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.innerWidth < 768 ||
+      (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) ||
+      (navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 4);
+    let w = 0, h = 0, raf = 0, t = 0, last = 0;
     let particles: P[] = [];
     let stars: Star[] = [];
     const mouse = { x: -9999, y: -9999 };
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = lite ? 1 : Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
       w = window.innerWidth;
@@ -31,7 +38,7 @@ export default function BackgroundFX() {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(Math.floor((w * h) / 9500), 170);
+      const count = lite ? Math.min(Math.floor((w * h) / 22000), 28) : Math.min(Math.floor((w * h) / 9500), 170);
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
@@ -54,10 +61,13 @@ export default function BackgroundFX() {
       });
     };
 
-    const draw = () => {
+    const draw = (now = 0) => {
+      if (document.hidden) { raf = requestAnimationFrame(draw); return; }
+      if (lite && now - last < 33) { raf = requestAnimationFrame(draw); return; } // ~30fps on phones
+      last = now;
       t += 0.016;
       ctx.clearRect(0, 0, w, h);
-      const LINK = 150;
+      const LINK = lite ? 100 : 150;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
@@ -78,14 +88,16 @@ export default function BackgroundFX() {
         }
 
         const pulse = 0.55 + Math.sin(t * 2 + p.tw) * 0.35;
-        // glow
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 6);
-        g.addColorStop(0, `rgba(${p.c},${0.35 * pulse})`);
-        g.addColorStop(1, `rgba(${p.c},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 6, 0, Math.PI * 2);
-        ctx.fill();
+        if (!lite) {
+          // glow
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 6);
+          g.addColorStop(0, `rgba(${p.c},${0.35 * pulse})`);
+          g.addColorStop(1, `rgba(${p.c},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.c},${0.5 + pulse * 0.5})`;
@@ -103,7 +115,7 @@ export default function BackgroundFX() {
             ctx.stroke();
           }
         }
-        if (d < 220) {
+        if (!lite && d < 220) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
@@ -114,7 +126,7 @@ export default function BackgroundFX() {
       }
 
       // shooting stars
-      if (Math.random() < 0.012) spawnStar();
+      if (!lite && Math.random() < 0.012) spawnStar();
       stars = stars.filter((s) => s.life > 0);
       for (const s of stars) {
         s.x += s.vx;
@@ -153,10 +165,13 @@ export default function BackgroundFX() {
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-bg" aria-hidden="true">
-      <div className="aurora absolute -left-1/4 -top-1/4 h-[65vmax] w-[65vmax] rounded-full bg-brand/30 blur-[130px]" style={{ animationDuration: "14s" }} />
-      <div className="aurora absolute -bottom-1/3 -right-1/4 h-[60vmax] w-[60vmax] rounded-full bg-brand-cyan/20 blur-[140px] [animation-delay:-6s]" style={{ animationDuration: "17s" }} />
-      <div className="aurora absolute left-1/3 top-1/2 h-[40vmax] w-[40vmax] rounded-full bg-brand-pink/15 blur-[120px] [animation-delay:-10s]" style={{ animationDuration: "19s" }} />
-      <div className="grid-bg absolute inset-0 animate-gridDrift" />
+      {/* phones: cheap static gradients (no heavy blur) */}
+      <div className="absolute inset-0 md:hidden bg-[radial-gradient(circle_at_15%_10%,rgba(124,92,255,0.28),transparent_45%),radial-gradient(circle_at_85%_90%,rgba(34,211,238,0.18),transparent_45%),radial-gradient(circle_at_50%_55%,rgba(244,114,182,0.10),transparent_40%)]" />
+      {/* tablets / desktops: animated aurora */}
+      <div className="aurora absolute -left-1/4 -top-1/4 hidden h-[65vmax] w-[65vmax] rounded-full bg-brand/30 blur-[130px] md:block" style={{ animationDuration: "14s" }} />
+      <div className="aurora absolute -bottom-1/3 -right-1/4 hidden h-[60vmax] w-[60vmax] rounded-full bg-brand-cyan/20 blur-[140px] [animation-delay:-6s] md:block" style={{ animationDuration: "17s" }} />
+      <div className="aurora absolute left-1/3 top-1/2 hidden h-[40vmax] w-[40vmax] rounded-full bg-brand-pink/15 blur-[120px] [animation-delay:-10s] md:block" style={{ animationDuration: "19s" }} />
+      <div className="grid-bg absolute inset-0 md:animate-gridDrift" />
       <canvas ref={ref} className="absolute inset-0" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,#05060d_105%)]" />
     </div>

@@ -1,8 +1,6 @@
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
-/* ------------------------------------------------------------------ */
-/*  PROFILE – edit your links here (leave "" to hide a button/icon)    */
-/* ------------------------------------------------------------------ */
+
 export const profile = {
   name: "Md. Safikol Islam",
   shortName: "Safikol",
@@ -12,7 +10,7 @@ export const profile = {
   location: "Dhaka, Bangladesh",
   github: "https://github.com/safikolislam", // e.g. "https://github.com/your-username"
   linkedin: "https://www.linkedin.com/in/mdsafikolislam/",
-  resumeUrl: "/Md_Safikol_Islam_Resume.pdf", // replace the PDF in /public with the same name to update
+  resumeUrl: "/SAFIKOL_ISLAM_RESUME.pdf", // replace the PDF in /public with the same name to update
   roles: [
     "Full-stack Web Developer",
     "Next.js & TypeScript Engineer",

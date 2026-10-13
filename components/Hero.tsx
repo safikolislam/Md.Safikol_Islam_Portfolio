@@ -123,7 +123,7 @@ export default function Hero() {
           <div className="relative rounded-[2rem] bg-gradient-to-br from-brand via-brand-cyan to-brand-pink p-[2px]">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2rem-2px)] bg-surface">
               <Image
-                src="/safikol.png"
+                src="/safikol.jpg"
                 alt="Md. Safikol Islam, Full-stack Web Developer"
                 fill
                 priority

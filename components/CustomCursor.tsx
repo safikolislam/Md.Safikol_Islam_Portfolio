@@ -1,96 +1,82 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import "./cursor.css";
 
-const INTERACTIVE = "a, button, [role='button'], summary, label, [data-cursor='hover']";
+const HOVER = "a, button, [role='button'], summary, label, [data-cursor='hover']";
 const TEXT = "input, textarea, select";
 
 export default function CustomCursor() {
-  const [enabled, setEnabled] = useState(false);
-  const [mode, setMode] = useState<"idle" | "hover" | "text">("idle");
-  const [pressed, setPressed] = useState(false);
-  const [visible, setVisible] = useState(false);
-
-  const x = useMotionValue(-100);
-  const y = useMotionValue(-100);
-  const dotX = useSpring(x, { stiffness: 900, damping: 45, mass: 0.2 });
-  const dotY = useSpring(y, { stiffness: 900, damping: 45, mass: 0.2 });
-  const ringX = useSpring(x, { stiffness: 160, damping: 20, mass: 0.6 });
-  const ringY = useSpring(y, { stiffness: 160, damping: 20, mass: 0.6 });
-  const glowX = useSpring(x, { stiffness: 60, damping: 18, mass: 1 });
-  const glowY = useSpring(y, { stiffness: 60, damping: 18, mass: 1 });
+  const root = useRef<HTMLDivElement>(null);
+  const dot = useRef<HTMLDivElement>(null);
+  const ring = useRef<HTMLDivElement>(null);
+  const glow = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!fine) return;
-    setEnabled(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const el = root.current;
+    if (!fine || !el) return;
     document.documentElement.classList.add("has-custom-cursor");
 
-    const move = (e: PointerEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-      setVisible(true);
-      const t = e.target as Element | null;
-      if (t?.closest?.(TEXT)) setMode("text");
-      else if (t?.closest?.(INTERACTIVE)) setMode("hover");
-      else setMode("idle");
+    let tx = 0, ty = 0, rx = 0, ry = 0, gx = 0, gy = 0;
+    let raf = 0, last = 0, first = true;
+    let lastTarget: EventTarget | null = null;
+
+    const put = (n: HTMLElement | null, x: number, y: number) => {
+      if (n) n.style.transform = `translate3d(${x}px,${y}px,0)`;
     };
-    const down = () => setPressed(true);
-    const up = () => setPressed(false);
-    const leave = () => setVisible(false);
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 50);
+      last = now;
+      const kr = reduce ? 1 : 1 - Math.pow(1 - 0.2, dt / 16.67);
+      const kg = reduce ? 1 : 1 - Math.pow(1 - 0.07, dt / 16.67);
+      rx += (tx - rx) * kr; ry += (ty - ry) * kr;
+      gx += (tx - gx) * kg; gy += (ty - gy) * kg;
+      put(ring.current, rx, ry);
+      put(glow.current, gx, gy);
+      const gap = Math.abs(tx - rx) + Math.abs(ty - ry) + Math.abs(tx - gx) + Math.abs(ty - gy);
+      raf = gap > 0.1 ? requestAnimationFrame(tick) : 0;
+    };
+
+    const move = (e: PointerEvent) => {
+      tx = e.clientX; ty = e.clientY;
+      put(dot.current, tx, ty);
+      if (first) {
+        first = false;
+        rx = gx = tx; ry = gy = ty;
+        el.dataset.visible = "1";
+      }
+      if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
+      if (e.target === lastTarget) return;
+      lastTarget = e.target;
+      const t = e.target as Element | null;
+      el.dataset.mode = t?.closest?.(TEXT) ? "text" : t?.closest?.(HOVER) ? "hover" : "idle";
+    };
+    const down = () => { el.dataset.down = "1"; };
+    const up = () => { delete el.dataset.down; };
+    const leave = () => { delete el.dataset.visible; first = true; };
 
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerdown", down);
     window.addEventListener("pointerup", up);
     document.documentElement.addEventListener("mouseleave", leave);
     return () => {
+      cancelAnimationFrame(raf);
       document.documentElement.classList.remove("has-custom-cursor");
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerdown", down);
       window.removeEventListener("pointerup", up);
       document.documentElement.removeEventListener("mouseleave", leave);
     };
-  }, [x, y]);
-
-  if (!enabled) return null;
-
-  const ringSize = mode === "hover" ? 68 : mode === "text" ? 6 : 38;
-  const ringH = mode === "text" ? 30 : ringSize;
+  }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[100]" aria-hidden="true">
-      {/* soft spotlight */}
-      <motion.div
-        className="absolute left-0 top-0 h-[420px] w-[420px] rounded-full"
-        style={{
-          x: glowX,
-          y: glowY,
-          translateX: "-50%",
-          translateY: "-50%",
-          opacity: visible ? 1 : 0,
-          background: "radial-gradient(circle, rgba(124,92,255,0.16), rgba(34,211,238,0.06) 45%, transparent 70%)",
-        }}
-      />
-      {/* ring */}
-      <motion.div
-        className="absolute left-0 top-0 rounded-full border"
-        style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%", opacity: visible ? 1 : 0 }}
-        animate={{
-          width: ringSize,
-          height: ringH,
-          scale: pressed ? 0.8 : 1,
-          borderColor: mode === "hover" ? "rgba(34,211,238,0.9)" : "rgba(255,255,255,0.45)",
-          backgroundColor: mode === "hover" ? "rgba(124,92,255,0.18)" : "rgba(255,255,255,0)",
-          borderRadius: mode === "text" ? 4 : 999,
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      />
-      {/* dot */}
-      <motion.div
-        className="absolute left-0 top-0 h-2 w-2 rounded-full bg-brand-cyan shadow-[0_0_14px_3px_rgba(34,211,238,0.8)]"
-        style={{ x: dotX, y: dotY, translateX: "-50%", translateY: "-50%", opacity: visible && mode !== "text" ? 1 : 0 }}
-      />
+    <div ref={root} className="cursor-root" data-mode="idle" aria-hidden="true">
+      <div ref={glow} className="c-pos"><div className="c-glow" /></div>
+      <div ref={ring} className="c-pos"><div className="c-ring" /></div>
+      <div ref={dot} className="c-pos"><div className="c-dot" /></div>
     </div>
   );
 }
