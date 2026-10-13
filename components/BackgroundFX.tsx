@@ -8,7 +8,11 @@ export default function BackgroundFX() {
   const ref = useRef<HTMLCanvasElement>(null);
   const [tier, setTier] = useState<Tier>("static");
 
-  useEffect(() => { setTier(getTier()); }, []);
+  useEffect(() => {
+    
+    const desktop = window.matchMedia("(min-width: 768px) and (hover: hover) and (pointer: fine)").matches;
+    setTier(desktop ? getTier() : "static");
+  }, []);
 
   useEffect(() => {
     const canvas = ref.current;
