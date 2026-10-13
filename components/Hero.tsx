@@ -9,6 +9,8 @@ import { profile, projects, skillGroups } from "@/lib/data";
 import { GithubIcon, LinkedinIcon } from "./icons";
 import TechLogo from "./TechLogo";
 
+const RESUME_PATH = "/SAFIKOL_ISLAM_RESUME.pdf";
+
 function Typewriter({ words }: { words: string[] }) {
   const [i, setI] = useState(0);
   const [text, setText] = useState("");
@@ -88,11 +90,9 @@ export default function Hero() {
             <Link href="/#projects" className="btn-primary">
               <Sparkles size={16} /> View my projects
             </Link>
-            {profile.resumeUrl && (
-              <a href={profile.resumeUrl} download className="btn-ghost">
-                <Download size={16} /> Resume
-              </a>
-            )}
+            <a href={RESUME_PATH} download="SAFIKOL_ISLAM_RESUME.pdf" className="btn-ghost">
+              <Download size={16} /> Resume
+            </a>
           </motion.div>
 
           <motion.div {...fade(0.65)} className="mt-8 flex items-center gap-4 text-slate-400">
