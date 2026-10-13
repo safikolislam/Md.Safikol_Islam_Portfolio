@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 import "@fontsource-variable/space-grotesk";
-
-
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { profile, SITE_URL } from "@/lib/data";
@@ -79,9 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        {/* <BackgroundFX />
-        <CustomCursor />
-        <ClickFireworks /> */}
+     
         <Navbar />
         <main>{children}</main>
         <Footer />
