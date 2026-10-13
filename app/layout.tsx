@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 import "@fontsource-variable/space-grotesk";
-import BackgroundFX from "@/components/BackgroundFX";
-import ClickFireworks from "@/components/ClickFireworks";
-import CustomCursor from "@/components/CustomCursor";
+
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { profile, SITE_URL } from "@/lib/data";
