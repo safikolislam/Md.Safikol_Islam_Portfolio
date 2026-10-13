@@ -80,9 +80,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <BackgroundFX />
+        {/* <BackgroundFX />
         <CustomCursor />
-        <ClickFireworks />
+        <ClickFireworks /> */}
         <Navbar />
         <main>{children}</main>
         <Footer />
