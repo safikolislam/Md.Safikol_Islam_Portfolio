@@ -86,3 +86,47 @@ html.has-custom-cursor * {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---- Mobile / touch performance: remove the effects that make scrolling laggy ---- */
+@media (max-width: 767px),
+(pointer: coarse) {
+
+  /* backdrop blur is recalculated on every scroll frame: very slow on phones */
+  .glass,
+  .btn-ghost,
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .glass {
+    background-color: rgba(14, 16, 30, 0.78);
+  }
+
+  /* navbar / footer: solid background instead of see-through blur */
+  [class*="bg-bg/70"],
+  [class*="bg-bg/95"] {
+    background-color: #05060d !important;
+  }
+
+  /* big blurred decorative blobs */
+  [class*="blur-"]:not([class*="backdrop-blur"]) {
+    display: none !important;
+  }
+
+  /* endless animations that keep the GPU busy */
+  .animate-float,
+  .animate-spinSlow,
+  .animate-ping,
+  .animate-bounce {
+    animation: none !important;
+  }
+
+  .mix-blend-multiply {
+    mix-blend-mode: normal !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
