@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, Download, MapPin, Sparkles } from "lucide-react";
+import {  Download, MapPin, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -159,9 +159,7 @@ export default function Hero() {
         ))}
       </motion.div>
 
-      <Link href="/#about" aria-label="Scroll down" className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-slate-500 hover:text-white md:block">
-        <ArrowDown className="animate-bounce" size={22} />
-      </Link>
+
     </section>
   );
 }
