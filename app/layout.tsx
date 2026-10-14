@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { profile, SITE_URL } from "@/lib/data";
 import "./globals.css";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import LightBackground from "@/components/LightBackground";
 
 const description =
   "Md. Safikol Islam is a Full-stack Web Developer from Dhaka, Bangladesh, building role-based web apps with Next.js, TypeScript, Node.js, Express, Prisma, PostgreSQL and MongoDB.";
@@ -66,7 +67,7 @@ const jsonLd = {
   url: SITE_URL,
   email: `mailto:${profile.email}`,
   telephone: profile.phone,
-  image: `${SITE_URL}/safikol.png`,
+  image: `${SITE_URL}/safikol.jpg`,
   address: { "@type": "PostalAddress", addressLocality: "Dhaka", addressCountry: "BD" },
   knowsAbout: ["Next.js", "React", "TypeScript", "Node.js", "Express.js", "Prisma", "PostgreSQL", "MongoDB"],
   sameAs: [profile.github, profile.linkedin].filter(Boolean),
@@ -77,8 +78,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-     
+        <LightBackground></LightBackground>
         <Navbar />
+        
         <main>{children}</main>
         <Footer />
         <WhatsAppFloat></WhatsAppFloat>
