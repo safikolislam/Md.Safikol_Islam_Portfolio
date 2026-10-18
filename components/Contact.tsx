@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Loader2, Mail, MapPin, Phone, Send, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import { profile } from "@/lib/data";
-import { GithubIcon, LinkedinIcon } from "./icons";
 import { Reveal, SectionHeading } from "./Reveal";
 
 function WhatsappIcon({ size = 22, className = "" }: { size?: number; className?: string }) {
@@ -76,21 +75,6 @@ export default function Contact({ defaultSubject = "" }: { defaultSubject?: stri
               <div key={label}>{inner}</div>
             );
           })}
-          <div className="flex gap-3 pt-2">
-            {profile.github && (
-              <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="glass grid h-12 w-12 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
-                <GithubIcon className="h-5 w-5" />
-              </a>
-            )}
-            {profile.linkedin && (
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="glass grid h-12 w-12 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
-                <LinkedinIcon className="h-5 w-5" />
-              </a>
-            )}
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="glass grid h-12 w-12 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-emerald-400">
-              <WhatsappIcon size={20} />
-            </a>
-          </div>
         </Reveal>
 
         <Reveal delay={0.12}>
