@@ -1,7 +1,7 @@
-import { ArrowUp, Mail, MapPin } from "lucide-react";
+import { ArrowUp, Mail, MapPin, XIcon } from "lucide-react";
 import Link from "next/link";
 import { navLinks, profile, projects } from "@/lib/data";
-import { FacebookIcon, GithubIcon, LinkedinIcon } from "./icons";
+import { FacebookIcon, GithubIcon, LinkedinIcon,  } from "./icons";
 
 export default function Footer() {
   return (
@@ -32,6 +32,11 @@ export default function Footer() {
             {profile.facebook && (
               <a href={profile.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
                 <FacebookIcon className="h-4 w-4" />
+              </a>
+            )}
+            {profile.twitter && (
+              <a href={profile.twitter} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
+                <XIcon className="h-4 w-4" />
               </a>
             )}
             <a href={`mailto:${profile.email}`} aria-label="Email" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
