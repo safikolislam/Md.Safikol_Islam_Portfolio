@@ -7,6 +7,7 @@ import { profile, SITE_URL } from "@/lib/data";
 import "./globals.css";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import LightBackground from "@/components/LightBackground";
+import Loader from "@/components/Loader";
 
 const description =
   "Md. Safikol Islam is a Full-stack Web Developer from Dhaka, Bangladesh, building role-based web apps with Next.js, TypeScript, Node.js, Express, Prisma, PostgreSQL and MongoDB.";
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <Loader></Loader>
         <LightBackground></LightBackground>
         <Navbar />
         
