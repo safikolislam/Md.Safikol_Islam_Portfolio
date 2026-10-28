@@ -11,7 +11,7 @@ export const profile = {
   github: "https://github.com/safikolislam", // e.g. "https://github.com/your-username"
   linkedin: "https://www.linkedin.com/in/mdsafikolislam/",
  // replace the PDF in /public with the same name to update
-  facebook: "https://www.facebook.com/md.safikol.islam.ashik",
+  facebook: "https://www.facebook.com/profile.php?id=61595649266051",
    twitter: "https://x.com/SafikolIslam4",
   roles: [
     "Full-stack Web Developer",
