@@ -12,7 +12,8 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/mdsafikolislam/",
  // replace the PDF in /public with the same name to update
   facebook: "https://www.facebook.com/profile.php?id=61595649266051",
-   twitter: "https://x.com/SafikolIslam4",
+  twitter: "https://x.com/SafikolIslam4",
+  instagram: "https://www.instagram.com/safikol41/",
   roles: [
     "Full-stack Web Developer",
     "Next.js & TypeScript Engineer",

@@ -1,7 +1,8 @@
-import { ArrowUp, Mail, MapPin, XIcon } from "lucide-react";
+import { ArrowUp, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
+import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { navLinks, profile, projects } from "@/lib/data";
-import { FacebookIcon, GithubIcon, LinkedinIcon,  } from "./icons";
+import { FacebookIcon, GithubIcon, LinkedinIcon } from "./icons";
 
 export default function Footer() {
   return (
@@ -18,7 +19,7 @@ export default function Footer() {
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
             Full-stack web developer crafting fast, secure and role-based web apps. Open to new opportunities.
           </p>
-          <div className="mt-5 flex gap-3">
+          <div className="mt-5 flex flex-wrap gap-3">
             {profile.github && (
               <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
                 <GithubIcon className="h-4 w-4" />
@@ -36,7 +37,12 @@ export default function Footer() {
             )}
             {profile.twitter && (
               <a href={profile.twitter} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
-                <XIcon className="h-4 w-4" />
+                <FaXTwitter className="h-4 w-4" />
+              </a>
+            )}
+            {profile.instagram && (
+              <a href={profile.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
+                <FaInstagram className="h-4 w-4" />
               </a>
             )}
             <a href={`mailto:${profile.email}`} aria-label="Email" className="glass grid h-10 w-10 place-items-center rounded-full text-slate-300 transition hover:-translate-y-1 hover:text-white">
